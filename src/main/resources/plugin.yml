@@ -21,8 +21,12 @@ commands:
     permission: blossom.admin
   shop:
     description: Open the Blossom shop
+  sellgui:
+    description: Open a chest - put items in and close it to sell them all
+    aliases: [sg, sellmenu]
   sell:
-    description: Sell the item in your hand
+    description: Open the sell chest (/sell hand sells what you're holding)
+    usage: /sell [hand]
   worth:
     description: Check the live price of the item in your hand
   discord:

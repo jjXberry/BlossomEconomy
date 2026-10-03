@@ -47,6 +47,9 @@ public class PriceDisplayTask implements Runnable {
             if (hand.getType().isAir() || !market.canSell(hand)) {
                 continue;
             }
+            if (inCombat(player)) {
+                continue; // BlossomCombat's timer is using the action bar
+            }
             String text = format
                     .replace("%each%", Text.money(market.sellPrice(hand)))
                     .replace("%stack%", Text.money(market.quoteSell(hand)))
@@ -55,5 +58,20 @@ public class PriceDisplayTask implements Runnable {
             player.sendActionBar(Text.component(text));
         }
         lastShown.keySet().retainAll(online);
+    }
+
+    /** Asks BlossomCombat (if installed) whether this player is in combat. */
+    private boolean inCombat(Player player) {
+        try {
+            org.bukkit.plugin.Plugin combat = Bukkit.getPluginManager().getPlugin("BlossomCombat");
+            if (combat == null || !combat.isEnabled()) {
+                return false;
+            }
+            Object manager = combat.getClass().getMethod("combat").invoke(combat);
+            Object tagged = manager.getClass().getMethod("isTagged", Player.class).invoke(manager, player);
+            return Boolean.TRUE.equals(tagged);
+        } catch (Throwable ignored) {
+            return false;
+        }
     }
 }

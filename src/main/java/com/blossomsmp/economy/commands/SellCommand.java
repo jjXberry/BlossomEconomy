@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-/** /sell - sells the item in your hand */
+/** /sell - opens the sell chest. /sell hand - sells the item in your hand */
 public class SellCommand implements TabExecutor {
 
     private final BlossomEconomy plugin;
@@ -30,12 +30,19 @@ public class SellCommand implements TabExecutor {
             player.sendMessage(plugin.msg("creative-sell-blocked"));
             return true;
         }
-        Menus.sellHand(plugin, player);
+        if (args.length > 0 && args[0].equalsIgnoreCase("hand")) {
+            Menus.sellHand(plugin, player);
+        } else {
+            Menus.openSell(plugin, player);
+        }
         return true;
     }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        if (args.length == 1 && "hand".startsWith(args[0].toLowerCase())) {
+            return List.of("hand");
+        }
         return List.of();
     }
 }

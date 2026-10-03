@@ -68,6 +68,7 @@ public final class BlossomEconomy extends JavaPlugin {
         register("worth", new WorthCommand(this));
         register("ah", new AuctionCommand(this));
         register("daily", new DailyCommand(this));
+        register("sellgui", new com.blossomsmp.economy.commands.SellGuiCommand(this));
         register("discord", new DiscordCommand(this));
 
         PluginManager pm = getServer().getPluginManager();

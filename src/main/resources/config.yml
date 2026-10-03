@@ -45,7 +45,7 @@ price-display:
 # ----------------------------------------------
 market:
   # Shop buy price = normal price x this (higher = everything in /shop costs more)
-  buy-multiplier: 6.0
+  buy-multiplier: 10.0
   # How much ONE item sold/bought moves the price (0.001 = 0.1%, so a stack of 64 moves it about 6%)
   impact-per-item: 0.001
   # Lowest a price can drop to (% of normal)
@@ -62,23 +62,28 @@ market:
 # Add any item here to give it its own /shop price.
 # ----------------------------------------------
 buy-prices:
-  TOTEM_OF_UNDYING: 25000
-  NETHERITE_SCRAP: 6000
-  NETHERITE_INGOT: 30000
-  NETHERITE_BLOCK: 270000
-  NETHERITE_UPGRADE_SMITHING_TEMPLATE: 20000
-  DIAMOND: 500
-  DIAMOND_BLOCK: 4500
-  GOLDEN_APPLE: 750
-  ENDER_PEARL: 250
-  EXPERIENCE_BOTTLE: 150
-  SHULKER_SHELL: 5000
-  SHULKER_BOX: 12000
-  TNT: 300
-  COBWEB: 100
-  BLAZE_ROD: 200
-  EMERALD: 400
-  EMERALD_BLOCK: 3600
+  TOTEM_OF_UNDYING: 75000
+  NETHERITE_SCRAP: 25000
+  NETHERITE_INGOT: 120000
+  NETHERITE_BLOCK: 1080000
+  NETHERITE_UPGRADE_SMITHING_TEMPLATE: 75000
+  ANCIENT_DEBRIS: 25000
+  DIAMOND: 2000
+  DIAMOND_BLOCK: 18000
+  GOLDEN_APPLE: 3000
+  ENCHANTED_GOLDEN_APPLE: 150000
+  ENDER_PEARL: 1000
+  EXPERIENCE_BOTTLE: 500
+  SHULKER_SHELL: 15000
+  SHULKER_BOX: 35000
+  TNT: 1000
+  COBWEB: 400
+  BLAZE_ROD: 800
+  EMERALD: 1200
+  EMERALD_BLOCK: 10800
+  ELYTRA: 250000
+  MACE: 200000
+  TRIDENT: 50000
 
 # ----------------------------------------------
 # Discord (/discord)
