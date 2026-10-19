@@ -52,12 +52,29 @@ public final class Text {
         return ChatColor.translateAlternateColorCodes('&', out.toString());
     }
 
-    /** Full money format, e.g. $1,234.5 */
-    public static synchronized String money(double amount) {
-        return (amount < 0 ? "-$" : "$") + MONEY.format(Math.abs(amount));
+    // How money is shown, set from config.yml (currency.format). {amount} is the number.
+    private static volatile String currencyFormat = "{amount} Petals";
+    private static volatile String currencySymbol = "";
+
+    public static void setCurrency(String format) {
+        if (format == null || !format.contains("{amount}")) {
+            format = "{amount} Petals";
+        }
+        currencyFormat = format;
+        // Whatever comes before/after {amount} (e.g. "$", " Petals") is removed when players type amounts
+        currencySymbol = format.replace("{amount}", "").trim().toLowerCase(Locale.ROOT);
     }
 
-    /** Short money format, e.g. $1.2K, $3.5M */
+    private static String wrap(double amount, String number) {
+        return (amount < 0 ? "-" : "") + currencyFormat.replace("{amount}", number);
+    }
+
+    /** Full money format, e.g. 1,234.5 Petals */
+    public static synchronized String money(double amount) {
+        return wrap(amount, MONEY.format(Math.abs(amount)));
+    }
+
+    /** Short money format, e.g. 1.2K Petals, 3.5M Petals */
     public static String shortMoney(double amount) {
         double abs = Math.abs(amount);
         int index = 0;
@@ -72,18 +89,22 @@ public final class Text {
         if (number.endsWith(".0")) {
             number = number.substring(0, number.length() - 2);
         }
-        return (amount < 0 ? "-$" : "$") + number + SUFFIXES[index];
+        return wrap(amount, number + SUFFIXES[index]);
     }
 
     /**
-     * Parses amounts like "100", "2.5k", "1m", "$1,000".
+     * Parses amounts like "100", "2.5k", "1m", "1,000 petals".
      * Returns null if invalid or not positive.
      */
     public static Double parseAmount(String input) {
         if (input == null) {
             return null;
         }
-        String s = input.toLowerCase(Locale.ROOT).replace(",", "").replace("$", "").trim();
+        String s = input.toLowerCase(Locale.ROOT).replace(",", "").replace("$", "");
+        if (!currencySymbol.isEmpty()) {
+            s = s.replace(currencySymbol, "");
+        }
+        s = s.replace("petals", "").replace("petal", "").replace("✿", "").trim();
         if (s.isEmpty()) {
             return null;
         }

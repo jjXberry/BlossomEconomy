@@ -56,12 +56,12 @@ public class VaultEconomy implements Economy {
 
     @Override
     public String currencyNamePlural() {
-        return "Dollars";
+        return plugin.getConfig().getString("currency.name-plural", "Petals");
     }
 
     @Override
     public String currencyNameSingular() {
-        return "Dollar";
+        return plugin.getConfig().getString("currency.name-singular", "Petal");
     }
 
     // ---- Accounts ----

@@ -42,6 +42,7 @@ public final class BlossomEconomy extends JavaPlugin {
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        Text.setCurrency(getConfig().getString("currency.format", "{amount} Petals"));
 
         economy = new EconomyManager(this);
         economy.load();
@@ -142,6 +143,7 @@ public final class BlossomEconomy extends JavaPlugin {
     /** /eco reload */
     public void reload() {
         reloadConfig();
+        Text.setCurrency(getConfig().getString("currency.format", "{amount} Petals"));
         market.loadConfig();
         shop.load();
     }

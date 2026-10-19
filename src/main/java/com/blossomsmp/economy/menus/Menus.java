@@ -90,14 +90,74 @@ public final class Menus {
                             : "&7Sells for: &cCan't be sold",
                     "&7Market: " + market.trend(material),
                     "",
-                    "&#FFB6C1Left-click &8» &7Buy 1 &8(&a" + Text.money(market.quoteBuy(material, 1)) + "&8)",
-                    "&#FFB6C1Right-click &8» &7Buy 16 &8(&a" + Text.money(market.quoteBuy(material, 16)) + "&8)",
-                    "&#FFB6C1Shift-click &8» &7Buy 64 &8(&a" + Text.money(market.quoteBuy(material, 64)) + "&8)")));
+                    "&#FFB6C1Click to buy")));
         }
         fill(plugin, inv, 45, 54);
         inv.setItem(CATEGORY_BACK_SLOT, item(Material.ARROW, "&#FF69B4&lBack", List.of("&7Return to the shop")));
         holder.getSlotActions().put(CATEGORY_BACK_SLOT, ACTION_BACK);
         inv.setItem(CATEGORY_BALANCE_SLOT, balanceItem(plugin, player));
+    }
+
+    // ------------------------------------------------------------------
+    // Buy menu (pick an amount, then confirm)
+    // ------------------------------------------------------------------
+
+    public static final int BUY_ITEM_SLOT = 13;
+    private static final int BUY_CANCEL_SLOT = 20;
+    private static final int BUY_BALANCE_SLOT = 22;
+    private static final int BUY_CONFIRM_SLOT = 24;
+    private static final int[] BUY_STEPS = {-64, -10, -1, 1, 10, 64};
+    private static final int[] BUY_STEP_SLOTS = {10, 11, 12, 14, 15, 16};
+
+    /** Most a player can buy at once: a full inventory of that item. */
+    public static int maxAmount(Material material) {
+        return Math.max(1, material.getMaxStackSize()) * 36;
+    }
+
+    public static void openBuy(BlossomEconomy plugin, Player player, String categoryId, Material material) {
+        MenuHolder holder = new MenuHolder(MenuHolder.Type.SHOP_BUY, categoryId + ":" + material.name());
+        Inventory inv = Bukkit.createInventory(holder, 27,
+                Text.color(plugin.getConfig().getString("menus.buy-title", "&#FF69B4&l❀ Buy " + Text.itemName(material))
+                        .replace("%item%", Text.itemName(material))));
+        holder.setInventory(inv);
+        holder.setAmount(1);
+        renderBuy(plugin, player, inv, holder, material);
+        player.openInventory(inv);
+        click(player);
+    }
+
+    public static void renderBuy(BlossomEconomy plugin, Player player, Inventory inv, MenuHolder holder, Material material) {
+        MarketManager market = plugin.getMarket();
+        int amount = holder.getAmount();
+        fill(plugin, inv, 0, 27);
+        holder.getSlotActions().clear();
+
+        ItemStack shown = item(material, "&f" + Text.itemName(material) + " &7x" + amount, List.of(
+                "&7Price each: &a" + Text.money(market.buyPrice(material)),
+                "&7Total: &a" + Text.money(market.quoteBuy(material, amount)),
+                "",
+                "&7Use &c- &7and &a+ &7to change the amount"));
+        shown.setAmount(Math.max(1, Math.min(amount, material.getMaxStackSize())));
+        inv.setItem(BUY_ITEM_SLOT, shown);
+
+        for (int i = 0; i < BUY_STEPS.length; i++) {
+            int step = BUY_STEPS[i];
+            boolean add = step > 0;
+            ItemStack pane = item(add ? Material.LIME_STAINED_GLASS_PANE : Material.RED_STAINED_GLASS_PANE,
+                    (add ? "&a&l+" : "&c&l-") + Math.abs(step),
+                    List.of(add ? "&7Add " + step : "&7Remove " + (-step)));
+            pane.setAmount(Math.abs(step));
+            inv.setItem(BUY_STEP_SLOTS[i], pane);
+            holder.getSlotActions().put(BUY_STEP_SLOTS[i], "amt:" + step);
+        }
+
+        inv.setItem(BUY_CANCEL_SLOT, item(Material.RED_CONCRETE, "&c&lCancel", List.of("&7Go back")));
+        holder.getSlotActions().put(BUY_CANCEL_SLOT, "cancel");
+        inv.setItem(BUY_BALANCE_SLOT, balanceItem(plugin, player));
+        inv.setItem(BUY_CONFIRM_SLOT, item(Material.LIME_CONCRETE, "&a&lConfirm", List.of(
+                "&7Buy &f" + amount + "x " + Text.itemName(material),
+                "&7for &a" + Text.money(market.quoteBuy(material, amount)))));
+        holder.getSlotActions().put(BUY_CONFIRM_SLOT, "confirm");
     }
 
     public static void buy(BlossomEconomy plugin, Player player, Material material, int amount) {

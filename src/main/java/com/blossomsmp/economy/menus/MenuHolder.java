@@ -12,6 +12,7 @@ public class MenuHolder implements InventoryHolder {
     public enum Type {
         SHOP_MAIN,
         SHOP_CATEGORY,
+        SHOP_BUY,
         SELL,
         AH_BROWSE,
         AH_CONFIRM,
@@ -24,6 +25,7 @@ public class MenuHolder implements InventoryHolder {
     private final int page;
     private final Map<Integer, String> slotActions = new HashMap<>();
     private Inventory inventory;
+    private int amount = 1;
 
     public MenuHolder(Type type, String data) {
         this(type, data, 0);
@@ -46,6 +48,15 @@ public class MenuHolder implements InventoryHolder {
 
     public int getPage() {
         return page;
+    }
+
+    /** How many the player picked in the buy menu. */
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public Map<Integer, String> getSlotActions() {

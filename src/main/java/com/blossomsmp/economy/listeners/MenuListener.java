@@ -59,6 +59,7 @@ public class MenuListener implements Listener {
                 }
             }
             case SHOP_CATEGORY -> handleCategoryClick(player, top, holder, slot, action, click);
+            case SHOP_BUY -> handleBuyClick(player, top, holder, action);
             case AH_BROWSE -> handleBrowseClick(player, action);
             case AH_CONFIRM -> {
                 if ("confirm".equals(action)) {
@@ -111,9 +112,41 @@ public class MenuListener implements Listener {
         if (slot >= items.size() || slot >= ShopManager.MAX_ITEMS_PER_CATEGORY) {
             return;
         }
-        int amount = click.isShiftClick() ? 64 : click.isRightClick() ? 16 : 1;
-        Menus.buy(plugin, player, items.get(slot), amount);
-        Menus.renderCategory(plugin, player, top, holder, category);
+        Menus.openBuy(plugin, player, category.id(), items.get(slot));
+    }
+
+    private void handleBuyClick(Player player, Inventory top, MenuHolder holder, String action) {
+        if (action == null) {
+            return;
+        }
+        String data = holder.getData();
+        int split = data == null ? -1 : data.lastIndexOf(':');
+        Material material = split < 0 ? null : Material.matchMaterial(data.substring(split + 1));
+        String categoryId = split < 0 ? null : data.substring(0, split);
+        if (material == null) {
+            player.closeInventory();
+            return;
+        }
+        if (action.equals("cancel")) {
+            Menus.openCategory(plugin, player, categoryId);
+            return;
+        }
+        if (action.equals("confirm")) {
+            Menus.buy(plugin, player, material, holder.getAmount());
+            Menus.renderBuy(plugin, player, top, holder, material);
+            return;
+        }
+        if (action.startsWith("amt:")) {
+            try {
+                int step = Integer.parseInt(action.substring(4));
+                int next = Math.max(1, Math.min(Menus.maxAmount(material), holder.getAmount() + step));
+                holder.setAmount(next);
+                Menus.click(player);
+                Menus.renderBuy(plugin, player, top, holder, material);
+            } catch (NumberFormatException ignored) {
+                // not a number
+            }
+        }
     }
 
     private void handleBrowseClick(Player player, String action) {

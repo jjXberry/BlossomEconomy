@@ -13,6 +13,16 @@ autosave-minutes: 5
 # Smallest amount allowed with /pay
 min-pay: 1
 
+# ----------------------------------------------
+# Currency: Blossom SMP uses Petals for everything
+# (/bal, /shop, /pay, /ah, /petalsshop, money nametags)
+# {amount} is the number. Examples: "{amount} Petals"  "✿{amount}"  "${amount}"
+# ----------------------------------------------
+currency:
+  format: "{amount} Petals"
+  name-singular: "Petal"
+  name-plural: "Petals"
+
 # Can players in creative mode use /sell? (set to false so staff can't print money)
 allow-creative-selling: true
 
@@ -84,6 +94,21 @@ buy-prices:
   ELYTRA: 250000
   MACE: 200000
   TRIDENT: 50000
+  # Gear (these match the price of the diamonds / netherite inside them)
+  DIAMOND_SWORD: 4000
+  DIAMOND_PICKAXE: 6000
+  DIAMOND_SHOVEL: 2000
+  DIAMOND_HELMET: 10000
+  DIAMOND_CHESTPLATE: 16000
+  DIAMOND_LEGGINGS: 14000
+  DIAMOND_BOOTS: 8000
+  NETHERITE_SWORD: 125000
+  NETHERITE_PICKAXE: 125000
+  NETHERITE_SHOVEL: 120000
+  NETHERITE_HELMET: 130000
+  NETHERITE_CHESTPLATE: 135000
+  NETHERITE_LEGGINGS: 135000
+  NETHERITE_BOOTS: 130000
 
 # ----------------------------------------------
 # Discord (/discord)
@@ -180,10 +205,9 @@ shop:
       name: "&#FF69B4&lCombat"
       icon: DIAMOND_SWORD
       slot: 15
-      items: [IRON_SWORD, IRON_AXE, DIAMOND_SWORD, DIAMOND_AXE, BOW, CROSSBOW, ARROW,
-              SPECTRAL_ARROW, SHIELD, IRON_HELMET, IRON_CHESTPLATE, IRON_LEGGINGS, IRON_BOOTS,
-              DIAMOND_HELMET, DIAMOND_CHESTPLATE, DIAMOND_LEGGINGS, DIAMOND_BOOTS, COBWEB, TNT,
-              EXPERIENCE_BOTTLE, TOTEM_OF_UNDYING, ELYTRA]
+      items: [ELYTRA, TOTEM_OF_UNDYING, EXPERIENCE_BOTTLE, DIAMOND_SWORD, DIAMOND_HELMET,
+              DIAMOND_CHESTPLATE, DIAMOND_LEGGINGS, DIAMOND_BOOTS, NETHERITE_SWORD,
+              NETHERITE_HELMET, NETHERITE_CHESTPLATE, NETHERITE_LEGGINGS, NETHERITE_BOOTS]
     netherend:
       name: "&#FF69B4&lNether & End"
       icon: ENDER_EYE
@@ -201,14 +225,10 @@ shop:
               DIAMOND_BLOCK, EMERALD_BLOCK, NETHERITE_SCRAP, NETHERITE_INGOT, NETHERITE_BLOCK,
               NETHERITE_UPGRADE_SMITHING_TEMPLATE]
     tools:
-      name: "&#FF69B4&lTools & Utility"
-      icon: IRON_PICKAXE
+      name: "&#FF69B4&lTools"
+      icon: DIAMOND_PICKAXE
       slot: 21
-      items: [IRON_PICKAXE, IRON_SHOVEL, IRON_HOE, DIAMOND_PICKAXE, DIAMOND_SHOVEL, DIAMOND_HOE,
-              SHEARS, FISHING_ROD, FLINT_AND_STEEL, BUCKET, COMPASS, CLOCK, SPYGLASS, LEAD, TORCH,
-              LANTERN, CHEST, BARREL, ENDER_CHEST, SHULKER_BOX, CRAFTING_TABLE, FURNACE, SMOKER,
-              BLAST_FURNACE, ANVIL, ENCHANTING_TABLE, BOOKSHELF, BOOK, BREWING_STAND, CAULDRON,
-              GLASS_BOTTLE, WHITE_BED, ITEM_FRAME]
+      items: [DIAMOND_PICKAXE, DIAMOND_SHOVEL, NETHERITE_PICKAXE, NETHERITE_SHOVEL]
     redstone:
       name: "&#FF69B4&lRedstone"
       icon: REDSTONE
