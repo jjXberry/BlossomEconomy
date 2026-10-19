@@ -130,6 +130,9 @@ daily-rewards:
   streak-reset-hours: 48
   # Money for day 1, day 2, day 3... After the last day, the last amount repeats.
   rewards: [100, 150, 200, 300, 400, 500, 1000]
+  # Console commands run when someone claims ({player} = name, {day} = streak day)
+  commands:
+    - "shards give {player} 25"
 
 # ----------------------------------------------
 # Auction house (/ah)

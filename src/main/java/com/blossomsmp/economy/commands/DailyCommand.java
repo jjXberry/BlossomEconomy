@@ -41,6 +41,12 @@ public class DailyCommand implements TabExecutor {
                 "%amount%", Text.money(result.reward())));
         player.sendMessage(plugin.msg("daily-next", "%amount%", Text.money(result.nextReward())));
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 0.6f, 1.2f);
+        // Extra rewards, e.g. Shards from BlossomSettings ({player}, {day})
+        for (String cmd : plugin.getConfig().getStringList("daily-rewards.commands")) {
+            org.bukkit.Bukkit.dispatchCommand(org.bukkit.Bukkit.getConsoleSender(), cmd
+                    .replace("{player}", player.getName())
+                    .replace("{day}", String.valueOf(result.streak())));
+        }
         return true;
     }
 
